@@ -1,17 +1,26 @@
 package Student_Details.School.Students.Controller;
+import Student_Details.School.Students.DTO.StudentDetails;
 import Student_Details.School.Students.Model.Student;
 import Student_Details.School.Students.Service.Student_serve;
+import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
+import Student_Details.School.Students.DTO.StudentResponse;
 import java.util.List;
 import java.util.Optional;
 
 @RestController
 @RequestMapping("/Carmel")
 public class Student_Controller {
+
+
+    @Autowired
+    private StudentResponse studentResponse;
+
+    @Autowired
+    private StudentDetails studentDetails;
 
     private final Student_serve student1;
     @Autowired
@@ -20,21 +29,21 @@ public class Student_Controller {
     }
 
     @GetMapping("/students")
-    public ResponseEntity<List<Student>> getStudents() {
-        try{
-            List<Student> std1=student1.getAllStudents();
-            return new ResponseEntity<>(std1,HttpStatus.OK);
-        }
-        catch(Exception e){
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+    public ResponseEntity<List<StudentResponse>> getStudents(HttpServletRequest request) {
+        try {
+            int id=(Integer)request.getAttribute("teacherId");
+            List<StudentResponse> responses = student1.getAllStudentResponses(id);
+            return new ResponseEntity<>(responses, HttpStatus.OK);
+        } catch (Exception e) {
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 
     @PostMapping("/students")
-    public ResponseEntity<?> addStudent(@RequestBody Student s1){
-        System.out.println("Received request to add student: " + s1);
+    public ResponseEntity<?> addStudent(@RequestBody StudentDetails s1,HttpServletRequest request){
         try{
-            student1.addStudent(s1);
+            int id=(Integer)request.getAttribute("teacherId");
+            student1.addStudent(s1,id);
             return ResponseEntity.status(HttpStatus.CREATED).body("Student added successfully");
         }
         catch(Exception e){
@@ -44,9 +53,10 @@ public class Student_Controller {
     }
 
     @GetMapping("/students/{id}")
-    public ResponseEntity<Optional<Student>> getStudent(@PathVariable int id){
+    public ResponseEntity<StudentResponse> getStudent(@PathVariable int id,HttpServletRequest request){
         try{
-            Optional<Student> s1=student1.getStudent(id);
+            int teacherId=(Integer)request.getAttribute("teacherId");
+            StudentResponse s1=student1.getStudent(id,teacherId);
             return new ResponseEntity<>(s1,HttpStatus.OK);
         }
         catch(Exception e){
@@ -55,9 +65,10 @@ public class Student_Controller {
         }
     }
     @PutMapping("/students/{id}")
-    public ResponseEntity<?> updateStudent(@PathVariable int id,@RequestBody Student s1){
+    public ResponseEntity<?> updateStudent(@PathVariable int id,@RequestBody StudentDetails s1,HttpServletRequest request){
+        int teacherId=(Integer)request.getAttribute("teacherId");
         try{
-            student1.updateDetails(id,s1);
+            student1.updateDetails(id,s1,teacherId);
             return new ResponseEntity<>(HttpStatus.OK);
         }
         catch(Exception e){
@@ -65,9 +76,10 @@ public class Student_Controller {
         }
     }
     @DeleteMapping("/students/{id}")
-    public ResponseEntity<?> deleteStudent(@PathVariable int id){
+    public ResponseEntity<?> deleteStudent(@PathVariable int id,HttpServletRequest request){
+        int teacherId=(Integer)request.getAttribute("teacherId");
     try{
-    student1.deleteStudent(id);
+    student1.deleteStudent(id,teacherId);
     return new ResponseEntity<>("Successfully deleted student with id: " + id,HttpStatus.OK);
     }
     catch(Exception e){

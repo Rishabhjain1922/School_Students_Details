@@ -2,5 +2,11 @@ package Student_Details.School.Students.Repo;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import Student_Details.School.Students.Model.Student;
+import org.springframework.data.jpa.repository.Query;
 
-public interface Student_Repo extends JpaRepository<Student,Integer>{}
+import java.util.List;
+
+public interface Student_Repo extends JpaRepository<Student,Integer>{
+        @Query("select s from Student s where s.teacher.id=?1")
+        List<Student> findAllbyTeacherId(int id);
+}

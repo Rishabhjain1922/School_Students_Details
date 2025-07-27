@@ -1,5 +1,6 @@
 package Student_Details.School.Students.Controller;
 
+import Student_Details.School.Students.DTO.CreateAccountRequest;
 import Student_Details.School.Students.Model.Teachers;
 import Student_Details.School.Students.Service.Teacher_Service;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,9 +17,9 @@ public class Teacher_Controller {
 
 
   @PostMapping("/create")
-  public ResponseEntity<?> createTeacher(@RequestBody Teachers t1){
+  public ResponseEntity<?> createTeacher(@RequestBody CreateAccountRequest request){
         try{
-        teacher1.createTeacher(t1);
+        teacher1.createTeacher(request);
         return new ResponseEntity<>("Teacher Account Created Successfully", HttpStatus.OK);
         }
         catch(Exception e){
@@ -29,11 +30,11 @@ public class Teacher_Controller {
   @PostMapping("/login")
   public ResponseEntity<?> loginTeacher(@RequestParam String UserName, @RequestParam String Password){
   try{
-  teacher1.loginTeacher(UserName, Password);
-  return new ResponseEntity<>("Login Successful",HttpStatus.OK);
+  String token=teacher1.loginTeacher(UserName, Password);
+  return new ResponseEntity<>("Login Successful      "+token ,HttpStatus.OK);
   }
   catch(Exception e){
-  return new ResponseEntity<>("Login Failed",HttpStatus.BAD_REQUEST);
+  return new ResponseEntity<>(e.getMessage(),HttpStatus.BAD_REQUEST);
   }
   }
 

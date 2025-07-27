@@ -1,0 +1,83 @@
+package Student_Details.School.Students.DTO;
+
+
+import org.springframework.stereotype.Component;
+
+@Component
+public class StudentResponse {
+    private int id;
+    private String name;
+    private int age;
+    private String gender;
+    private String address;
+    private int standard;
+    private String section;
+    private int marks;
+    private String PhoneNumber;
+    public StudentResponse() {}
+    public StudentResponse(int id, String name, int age, String gender, String address, int standard, String section, int marks, String PhoneNumber) {
+        this.id = id;
+        this.name = name;
+        this.age = age;
+        this.gender = gender;
+        this.address = address;
+        this.standard = standard;
+        this.section = section;
+        this.marks = marks;
+        this.PhoneNumber = PhoneNumber;
+    }
+    public int getId() {
+        return id;
+    }
+    public void setId(int id) {
+        this.id = id;
+    }
+    public String getName() {
+        return name;
+    }
+    public void setName(String name) {
+        this.name = name;
+    }
+    public int getAge() {
+        return age;
+    }
+    public void setAge(int age) {
+        this.age = age;
+    }
+    public String getGender() {
+        return gender;
+    }
+    public void setGender(String gender) {
+        this.gender = gender;
+    }
+    public String getAddress() {
+        return address;
+    }
+    public void setAddress(String address) {
+        this.address = address;
+    }
+    public int getStandard() {
+        return standard;
+    }
+    public void setStandard(int standard) {
+        this.standard = standard;
+    }
+    public String getSection() {
+        return section;
+    }
+    public void setSection(String section) {
+        this.section = section;
+    }
+    public int getMarks() {
+        return marks;
+    }
+    public void setMarks(int marks) {
+        this.marks = marks;
+    }
+    public String getPhoneNumber() {
+        return PhoneNumber;
+    }
+    public void setPhoneNumber(String PhoneNumber) {
+        this.PhoneNumber = PhoneNumber;
+    }
+}

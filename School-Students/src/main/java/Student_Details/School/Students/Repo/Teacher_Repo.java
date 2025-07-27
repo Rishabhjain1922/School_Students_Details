@@ -7,7 +7,7 @@ import org.springframework.stereotype.Repository;
 
 import java.util.Map;
 
-public interface Teacher_Repo extends JpaRepository<Teachers, Long> {
+public interface Teacher_Repo extends JpaRepository<Teachers, Integer> {
     boolean existsByUserName(String userName);
 
     Teachers findByUserName(String userName);

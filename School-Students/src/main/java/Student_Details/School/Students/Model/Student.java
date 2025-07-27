@@ -29,8 +29,9 @@ public class Student {
     @Column(name="gender")
     private String gender;
 
-    @Column(name="Teacher_Id, nullable=false")
-    private int teacherId;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "teacher_id", nullable = false)
+    private Teachers teacher;
 
     @Column(name="Marks")
     private int marks;
@@ -42,7 +43,7 @@ public class Student {
     public Student() {}
 
 
-    public Student(int id, String name, int standard, int age, String section, String address, String gender, int teacherId, int marks, String PhoneNumber) {
+    public Student(int id, String name, int standard, int age, String section, String address, String gender, Teachers teacher, int marks, String PhoneNumber) {
         this.id = id;
         this.name = name;
         this.standard = standard;
@@ -50,7 +51,7 @@ public class Student {
         this.section = section;
         this.address = address;
         this.gender = gender;
-        this.teacherId = teacherId;
+        this.teacher = teacher;
         this.marks = marks;
         this.PhoneNumber = PhoneNumber;
     }
@@ -69,10 +70,10 @@ public class Student {
     public void setAddress(String address) { this.address = address; }
     public String getGender() { return gender; }
     public void setGender(String gender) { this.gender = gender; }
-    public int getTeacherId() { return teacherId; }
-    public void setTeacherId(int teacherId) { this.teacherId = teacherId; }
     public int getMarks() { return marks; }
     public void setMarks(int marks) { this.marks = marks; }
     public String getPhoneNumber() { return PhoneNumber; }
     public void setPhoneNumber(String PhoneNumber) { this.PhoneNumber = PhoneNumber; }
+    public Teachers getTeacher() { return teacher; }
+    public void setTeacher(Teachers teacher) { this.teacher = teacher; }
 }
