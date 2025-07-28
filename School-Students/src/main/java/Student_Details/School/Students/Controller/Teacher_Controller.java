@@ -38,4 +38,16 @@ public class Teacher_Controller {
   }
   }
 
+  @PostMapping("/forgetPassword")
+  public ResponseEntity<?> forgetPassword(@RequestParam String emailId){
+  try{
+  teacher1.forgetPassword(emailId);
+  return new ResponseEntity<>("Email sent successfully",HttpStatus.OK);
+  }
+  catch(Exception e){
+  return new ResponseEntity<>(e.getMessage(),HttpStatus.BAD_REQUEST);
+
+  }
+}
+
 }

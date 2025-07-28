@@ -9,6 +9,8 @@ import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.Random;
+
 @Service
 public class Teacher_Service {
     @Autowired
@@ -42,5 +44,13 @@ public class Teacher_Service {
     Teachers t1=repo.findByUserName(userName);
     String token=javaUtils.generateToken(t1);
     return token;
+    }
+
+    public void forgetPassword(String emailId) {
+    if(!repo.existsByemailId(emailId)){
+    throw new RuntimeException("Teacher with emailId "+emailId+" not found");
+    }
+        Random rd=new Random();
+        int otp=1000+rd.nextInt(9000);
     }
 }
