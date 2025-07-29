@@ -46,8 +46,17 @@ public class Teacher_Controller {
   }
   catch(Exception e){
   return new ResponseEntity<>(e.getMessage(),HttpStatus.BAD_REQUEST);
-
   }
 }
 
+@PostMapping("/resetPassword")
+public ResponseEntity<?> resetPassword(@RequestParam int OTP,@RequestParam String emailId, @RequestParam String newPassword){
+    try{
+        teacher1.resetPassword(OTP,emailId,newPassword);
+        return new ResponseEntity<>("Password reset successfully",HttpStatus.OK);
+    }
+    catch(Exception e){
+        return new ResponseEntity<>(e.getMessage(),HttpStatus.BAD_REQUEST);
+    }
+}
 }

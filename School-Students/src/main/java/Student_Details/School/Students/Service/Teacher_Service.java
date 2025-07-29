@@ -9,15 +9,21 @@ import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.HashMap;
 import java.util.Random;
 
 @Service
 public class Teacher_Service {
+
+    HashMap<String,Integer> map=new HashMap<>();
     @Autowired
     private Teacher_Repo repo;
 
     @Autowired
     private JavaUtil javaUtils;
+
+    @Autowired
+    private MailService mailService;
 
     @Autowired
     private ModelMapper modelMapper;
@@ -52,5 +58,21 @@ public class Teacher_Service {
     }
         Random rd=new Random();
         int otp=1000+rd.nextInt(9000);
+        map.put(emailId,otp);
+        mailService.sendOtpEmail(emailId,String.valueOf(otp));
+    }
+
+    public void resetPassword(int otp, String emailId, String newPassword) {
+    if(!map.containsKey(emailId)){
+    throw new RuntimeException("Invalid emailId");
+    }
+    if(map.get(emailId)!=otp){
+    throw new RuntimeException("Invalid otp");
+    }
+    Teachers t1=repo.findByemailId(emailId);
+    t1.setPassword(newPassword);
+    repo.save(t1);
+    map.remove(emailId);
     }
 }
+
