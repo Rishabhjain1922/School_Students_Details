@@ -9,13 +9,15 @@ public class CreateAccountRequest {
     private String PhoneNumber;
     private String userName;
     private String Password;
+    private String emailId;
     public CreateAccountRequest() {}
-    public CreateAccountRequest(String name, String Department, String PhoneNumber, String userName, String Password) {
+    public CreateAccountRequest(String name, String Department, String PhoneNumber, String userName, String Password, String emailId) {
         this.name = name;
         this.Department = Department;
         this.PhoneNumber = PhoneNumber;
         this.userName = userName;
         this.Password = Password;
+        this.emailId = emailId;
     }
     public String getName() {
         return name;
@@ -46,5 +48,11 @@ public class CreateAccountRequest {
     }
     public void setPassword(String Password) {
         this.Password = Password;
+    }
+    public String getEmailId() {
+        return emailId;
+    }
+    public void setEmailId(String emailId) {
+        this.emailId = emailId;
     }
 }

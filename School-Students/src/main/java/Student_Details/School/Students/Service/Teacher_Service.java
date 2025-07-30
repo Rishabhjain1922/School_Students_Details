@@ -27,14 +27,22 @@ public class Teacher_Service {
 
     @Autowired
     private ModelMapper modelMapper;
-    public void createTeacher(CreateAccountRequest t1) {
-    if(repo.existsByUserName((t1.getUserName()))) {
-    throw new RuntimeException("Teacher with userName "+t1.getUserName()+" already exists");
+    public void createTeacher(CreateAccountRequest request) {
+    if(repo.existsByUserName((request.getUserName()))) {
+    throw new RuntimeException("Teacher with userName "+request.getUserName()+" already exists");
     }
-    if(t1.getPhoneNumber().length()!=10){
+    if(request.getPhoneNumber().length()!=10){
     throw new RuntimeException("Phone number should be of 10 digits");
     }
-    repo.save(modelMapper.map(t1, Teachers.class));
+        Teachers teacher = new Teachers();
+        teacher.setName(request.getName());
+        teacher.setDepartment(request.getDepartment());
+        teacher.setPhoneNumber(request.getPhoneNumber()); // Only works if entity field is String
+        teacher.setUserName(request.getUserName());
+        teacher.setPassword(request.getPassword());
+        teacher.setEmailId(request.getEmailId());
+
+        repo.save(teacher);
     }
 
     public String loginTeacher(String userName, String Password) {

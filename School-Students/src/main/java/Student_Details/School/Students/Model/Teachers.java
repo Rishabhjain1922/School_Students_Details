@@ -24,14 +24,18 @@ private String userName;
 @Column(name="Password", nullable=false)
 private String Password;
 
+@Column(name="emailId", nullable = false)
+private String emailId;
+
 public Teachers() {}
-public Teachers(int id, String name, String Department, String PhoneNumber, String userName, String Password) {
+public Teachers(int id, String name, String Department, String PhoneNumber, String userName, String Password,String emailId ) {
     this.id = id;
     this.name = name;
     this.Department = Department;
     this.PhoneNumber = PhoneNumber;
     this.userName = userName;
     this.Password = Password;
+    this.emailId=emailId;
 }
 public int getId() {
     return id;
@@ -69,4 +73,6 @@ public String getPassword() {
 public void setPassword(String Password) {
     this.Password = Password;
 }
+public void setEmailId(String emailId) { this.emailId = emailId; }
+public String getEmailId() { return emailId; }
 }
