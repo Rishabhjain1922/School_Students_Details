@@ -7,15 +7,16 @@ import Student_Details.School.Students.Repo.Teacher_Repo;
 import Student_Details.School.Students.Util.JavaUtil;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
 import java.util.HashMap;
 import java.util.Random;
 
 @Service
 public class Teacher_Service {
-
-    HashMap<String,Integer> map=new HashMap<>();
+    HashMap<String,otp> map=new HashMap<>();
     @Autowired
     private Teacher_Repo repo;
 
@@ -27,6 +28,9 @@ public class Teacher_Service {
 
     @Autowired
     private ModelMapper modelMapper;
+
+    @Autowired
+    private PasswordEncoder passwordEncoder;
     public void createTeacher(CreateAccountRequest request) {
     if(repo.existsByUserName((request.getUserName()))) {
     throw new RuntimeException("Teacher with userName "+request.getUserName()+" already exists");
@@ -39,7 +43,8 @@ public class Teacher_Service {
         teacher.setDepartment(request.getDepartment());
         teacher.setPhoneNumber(request.getPhoneNumber()); // Only works if entity field is String
         teacher.setUserName(request.getUserName());
-        teacher.setPassword(request.getPassword());
+        String encryptedPassword = passwordEncoder.encode(request.getPassword());
+        teacher.setPassword(encryptedPassword);
         teacher.setEmailId(request.getEmailId());
 
         repo.save(teacher);
@@ -52,7 +57,7 @@ public class Teacher_Service {
     if(Password.length()<8||userName.length()<1) {
     throw new RuntimeException("Invalid userName or password");
     }
-    if(!repo.findByUserName(userName).getPassword().equals(Password)){
+    if(!passwordEncoder.matches(Password,repo.findByUserName(userName).getPassword())){
     throw new RuntimeException("Invalid userName or password");
     }
     Teachers t1=repo.findByUserName(userName);
@@ -66,7 +71,8 @@ public class Teacher_Service {
     }
         Random rd=new Random();
         int otp=1000+rd.nextInt(9000);
-        map.put(emailId,otp);
+
+        map.put(emailId,new otp(otp,emailId,LocalDateTime.now()) );
         mailService.sendOtpEmail(emailId,String.valueOf(otp));
     }
 
@@ -74,13 +80,27 @@ public class Teacher_Service {
     if(!map.containsKey(emailId)){
     throw new RuntimeException("Invalid emailId");
     }
-    if(map.get(emailId)!=otp){
+    if(map.get(emailId).opt!=otp){
     throw new RuntimeException("Invalid otp");
     }
+    if(map.get(emailId).time.isBefore(LocalDateTime.now().minusMinutes(5))){
+    throw new RuntimeException("OTP expired");
+    }
+
     Teachers t1=repo.findByemailId(emailId);
     t1.setPassword(newPassword);
     repo.save(t1);
     map.remove(emailId);
     }
+}
+ class otp {
+int opt;
+String emailId;
+LocalDateTime time;
+public otp(int opt,String emailId, LocalDateTime time) {
+this.opt = opt;
+this.emailId = emailId;
+this.time = time;
+}
 }
 
