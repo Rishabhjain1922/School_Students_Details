@@ -41,7 +41,7 @@ public class Teacher_Service {
         Teachers teacher = new Teachers();
         teacher.setName(request.getName());
         teacher.setDepartment(request.getDepartment());
-        teacher.setPhoneNumber(request.getPhoneNumber()); // Only works if entity field is String
+        teacher.setPhoneNumber(request.getPhoneNumber());
         teacher.setUserName(request.getUserName());
         String encryptedPassword = passwordEncoder.encode(request.getPassword());
         teacher.setPassword(encryptedPassword);
@@ -88,7 +88,7 @@ public class Teacher_Service {
     }
 
     Teachers t1=repo.findByemailId(emailId);
-    t1.setPassword(newPassword);
+    t1.setPassword(passwordEncoder.encode(newPassword));
     repo.save(t1);
     map.remove(emailId);
     }
